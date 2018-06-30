@@ -3,7 +3,7 @@
 #include "Button.h"
 #include <stdio.h>
 
-void turnOnLedIfButtonIsPressed(void){
+void turnOnLedIfButtonIsPressed(void){ //not put while loop here
 	
 	if(getButtonState())
 	{
@@ -14,7 +14,96 @@ void turnOnLedIfButtonIsPressed(void){
 		turnLed (LED_OFF);
 	}
 	
+}
+void dotapTurnOntapTurnOffLed(LedButtonInfo *state){ 
 	
+	int currentButton = getButtonState();
 	
+	if(state->currentLedState == LED_OFF){
+
+		switch (currentButton){
+		
+			case BUTTON_RELEASE:
+			if(currentButton == state->previousButtonState){
+				state->previousButtonState = BUTTON_RELEASE;
+				state->currentLedState = LED_OFF;
+				//turnLed(LED_OFF);
+			}
+			else{
+				state->previousButtonState = BUTTON_PRESSED;
+				state->currentLedState = LED_ON;
+				//turnLed(LED_ON);
+			}		
+			break;
+		
+			case BUTTON_PRESSED:
+			if (currentButton == state->previousButtonState){
+				state->previousButtonState = BUTTON_PRESSED;
+				state->currentLedState = LED_ON;
+				turnLed(state->currentLedState);
+			}
+			else{
+				state->previousButtonState = BUTTON_RELEASE;
+				state->currentLedState = LED_ON;
+				//turnLed(LED_ON);
+			}		
+			break;
+		
+			default:
+				state->currentLedState = LED_OFF;
+				//turnLed(LED_OFF);
+	}
 	
 }
+
+	else {//if((state->currentLedState) == LED_ON){
+		switch (currentButton){
+		
+			case BUTTON_RELEASE:
+			if(currentButton == state->previousButtonState){
+				state->previousButtonState = BUTTON_RELEASE;
+				state->currentLedState = LED_OFF;
+				turnLed(state->currentLedState);
+			}
+			else{
+				state->previousButtonState = BUTTON_PRESSED;
+				state->currentLedState = LED_ON;
+				//turnLed(LED_ON);
+			}		
+			break;
+		
+			case BUTTON_PRESSED:
+			if (currentButton == state->previousButtonState){
+				state->previousButtonState = BUTTON_PRESSED;
+				state->currentLedState = LED_ON;
+				//turnLed(LED_ON);
+			}
+			else{
+				state->previousButtonState = BUTTON_RELEASE;
+				state->currentLedState = LED_OFF;
+				//turnLed(LED_OFF);
+			}		
+			break;
+		
+			default:
+			state->currentLedState = LED_ON;
+			//turnLed(LED_ON);
+	}
+}	
+	//turnLed(state->currentLedState);
+}
+
+	
+
+void doTrunOnLedOnButtonPressesAndHoldController(){	//just make it simple 
+	while(1) {
+		turnOnLedIfButtonIsPressed();
+	}
+}
+	
+void doTapTapLedContoller(){
+	LedState currentLedState;
+	while(1){
+		//tapTurnOntapTurnOffLed(&currentLedState);
+	}
+}	

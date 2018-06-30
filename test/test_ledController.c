@@ -10,18 +10,53 @@ void tearDown(void)
 {
 }
 
-void test_ledController_given_button_is_presses_expect_led_is_turned_on(void)
+void test_dotapTurnOntapTurnOffLed_given_led_is_off_and_is_presses_and_relese_expect_led_to_turned_on(void)
 {
-  getButtonState_ExpectAndReturn(BUTTON_PRESSED);	//call form mock_Button.h line no.26
-  turnLed_Expect(LED_ON);							//call form mock_led.h line no.26
+	LedButtonInfo info = {LED_OFF, BUTTON_RELEASE}; //initial state
+	
+	//open led situaltion//
+	getButtonState_ExpectAndReturn(BUTTON_RELEASE); //
+	dotapTurnOntapTurnOffLed(&info);	// led off ,button rel
+	getButtonState_ExpectAndReturn(BUTTON_PRESSED);
+	turnLed_Expect(LED_ON);
+	dotapTurnOntapTurnOffLed(&info);
+	getButtonState_ExpectAndReturn(BUTTON_RELEASE);
+	dotapTurnOntapTurnOffLed(&info);
+	//situaltion END//
   
-  turnOnLedIfButtonIsPressed();
   
+	TEST_ASSERT_EQUAL(LED_ON, info.currentLedState);
 }
 
-void test_ledController_given_button_is_non_presses_expect_led_is_turned_off(void)
+void xtest_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_expect_led_to_turned_off(void)
 {
-  getButtonState_ExpectAndReturn(BUTTON_RELEASE);	//param > 0 = 1
+	LedButtonInfo info = {LED_ON, BUTTON_RELEASE}; //initial state
+	
+	//off led situaltion//
+	getButtonState_ExpectAndReturn(BUTTON_RELEASE);
+	dotapTurnOntapTurnOffLed(&info);
+	getButtonState_ExpectAndReturn(BUTTON_PRESSED);
+	dotapTurnOntapTurnOffLed(&info);
+	getButtonState_ExpectAndReturn(BUTTON_RELEASE);
+	turnLed_Expect(LED_OFF);
+	dotapTurnOntapTurnOffLed(&info);
+	//situaltion END//
+  
+  
+	TEST_ASSERT_EQUAL(LED_OFF, info.currentLedState);
+}
+
+void xtest_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_led_is_turned_on(void)
+{
+  getButtonState_ExpectAndReturn(BUTTON_PRESSED);	
+  turnLed_Expect(LED_ON);
+  
+  turnOnLedIfButtonIsPressed();
+}
+
+void xtest_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_led_is_turned_off(void)
+{
+  getButtonState_ExpectAndReturn(BUTTON_RELEASE);	
   turnLed_Expect(LED_OFF);
   
   turnOnLedIfButtonIsPressed();
