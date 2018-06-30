@@ -15,10 +15,10 @@ void test_ledController_given_button_is_presses_expect_led_is_turned_on(void)
   int button;
   
   getButtonState_ExpectAndReturn(23);	//call form mock_Button.h line no.26
+  turnLed_Expect(LED_ON);				//call form mock_led.h line no.26
   
-  button =  getButtonState(); 
+  turnOnLedIfButtonIsPressed();
   
-  TEST_ASSERT_EQUAL(30,button);
 }
 
 void xtest_ledController_given_button_is_non_presses_expect_led_is_turned_off(void)
