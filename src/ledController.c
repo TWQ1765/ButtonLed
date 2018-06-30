@@ -9,6 +9,12 @@ void turnOnLedIfButtonIsPressed(void){
 	{
 		turnLed (LED_ON);
 	}
+	else {
+		
+		turnLed (LED_OFF);
+	}
+	
+	
 	
 	
 }
