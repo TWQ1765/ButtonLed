@@ -16,7 +16,7 @@ void turnOnLedIfButtonIsPressed(void){ //not put while loop here
 	
 }
 void dotapTurnOntapTurnOffLed(LedButtonInfo *state){ 
-	
+	/*
 	int currentButton = getButtonState();
 	
 	if(state->currentLedState == LED_OFF){
@@ -32,7 +32,7 @@ void dotapTurnOntapTurnOffLed(LedButtonInfo *state){
 			else{
 				state->previousButtonState = BUTTON_PRESSED;
 				state->currentLedState = LED_ON;
-				//turnLed(LED_ON);
+				turnLed(LED_ON);
 			}		
 			break;
 		
@@ -40,11 +40,12 @@ void dotapTurnOntapTurnOffLed(LedButtonInfo *state){
 			if (currentButton == state->previousButtonState){
 				state->previousButtonState = BUTTON_PRESSED;
 				state->currentLedState = LED_ON;
-				turnLed(state->currentLedState);
+				//turnLed(state->currentLedState);
 			}
 			else{
 				state->previousButtonState = BUTTON_RELEASE;
 				state->currentLedState = LED_ON;
+				//turnLed(state->currentLedState);
 				//turnLed(LED_ON);
 			}		
 			break;
@@ -91,6 +92,41 @@ void dotapTurnOntapTurnOffLed(LedButtonInfo *state){
 	}
 }	
 	//turnLed(state->currentLedState);
+	//*/
+ int currentButton = getButtonState();
+ 
+ switch (state->currentLedState){
+	 
+	 case LED_OFF :
+	 if (state->previousButtonState == currentButton){
+		 state->currentLedState = LED_OFF;
+		 state->previousButtonState = currentButton;
+	 }
+	 else if(state->previousButtonState != currentButton){
+		 state->currentLedState = LED_ON;
+		 state->previousButtonState = currentButton;
+		 turnLed(LED_ON);
+	 }
+	 else{state->currentLedState = LED_OFF;}
+	 break;
+	 case LED_ON :
+	  if (state->previousButtonState != currentButton){
+		 state->currentLedState = LED_ON;
+		 state->previousButtonState = currentButton;
+	 }
+	 else if(state->previousButtonState == currentButton){
+		 state->currentLedState = LED_OFF;
+		 state->previousButtonState = currentButton;
+		 turnLed(LED_OFF);
+	 }
+	 else{state->currentLedState = LED_OFF;}
+	 
+	 break;
+	 default:{state->currentLedState = LED_OFF;}
+	 
+ }
+	 
+	 
 }
 
 	

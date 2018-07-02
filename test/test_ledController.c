@@ -28,7 +28,7 @@ void test_dotapTurnOntapTurnOffLed_given_led_is_off_and_is_presses_and_relese_ex
 	TEST_ASSERT_EQUAL(LED_ON, info.currentLedState);
 }
 
-void xtest_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_expect_led_to_turned_off(void)
+void test_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_expect_led_to_turned_off(void)
 {
 	LedButtonInfo info = {LED_ON, BUTTON_RELEASE}; //initial state
 	
@@ -46,7 +46,7 @@ void xtest_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_ex
 	TEST_ASSERT_EQUAL(LED_OFF, info.currentLedState);
 }
 
-void xtest_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_led_is_turned_on(void)
+void test_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_led_is_turned_on(void)
 {
   getButtonState_ExpectAndReturn(BUTTON_PRESSED);	
   turnLed_Expect(LED_ON);
@@ -54,7 +54,7 @@ void xtest_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_
   turnOnLedIfButtonIsPressed();
 }
 
-void xtest_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_led_is_turned_off(void)
+void test_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_led_is_turned_off(void)
 {
   getButtonState_ExpectAndReturn(BUTTON_RELEASE);	
   turnLed_Expect(LED_OFF);
