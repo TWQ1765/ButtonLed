@@ -2,6 +2,13 @@
 #include "ledController.h"
 #include "mock_Button.h" 	//mock added
 #include "mock_led.h"		//mock added
+
+int turnLedCallNumbers = 0;
+int expectedgetButtonStateMaxCalls = 0;
+int expectTurnledMaxCalls = 0;
+ButtonState *expectedbuttonState = NULL;
+LedState *expectedLedState = NULL;
+
 void setUp(void)
 {
 }
@@ -9,25 +16,77 @@ void setUp(void)
 void tearDown(void)
 {
 }
+//fake no
+void fake_turnLed(LedState state, int NumCalls){
+	turnLedCallNumbers++;
+	if(NumCalls < expectTurnledMaxCalls){
+		if(state != expectedLedState[NumCalls]){
+			TEST_FAIL_MESSAGE("turnLed() was called ???,but expect ???");
+		}
+		else{
+		TEST_FAIL_MESSAGE("turnLed() was called ???,but expect ???"); //trow error
+		}
+	}
+}
+
+ButtonState fake_getButtonState(int NumCalls){
+	
+	if(NumCalls < expectedgetButtonStateMaxCalls){
+		return expectedButtomStates[NumCalls];	
+	}else
+		TEST_FAIL_MESSAGE("Received extra getButtonState() calls");
+}
+
+void setupFake(LedState expLedStates[], int ledMaxCalls, ButtonState buttStates[], int buttonMaxCalls){
+	turnLedCallNumbers = 0;
+	turnLed_StubWithCallback(fake_turnLed);
+	expectedLedState = expLedStates;
+	expectTurnledMaxCalls = ledMaxCalls;
+	getButtonState_StubWithCallback(fake_getButtonState);
+	expectedButtomStates = buttStates;
+	expectedgetButtonStateMaxCalls = buttonMaxCalls;
+}
+
+void verifyTurnOnLedCalls(int numCalls){
+	if(turnLedCallNumbers != numCalls){
+		TEST_FAIL_MESSAGE("turnLed() was not call at all. But 1 call is expected.");
+	}
+}
+
 
 void test_dotapTurnOntapTurnOffLed_given_led_is_off_and_is_presses_and_relese_expect_led_to_turned_on(void)
 {
 	LedButtonInfo info = {LED_OFF, BUTTON_RELEASE}; //initial state
+	LedState expectedLedState[] = {LED_ON};
+	ButtonStates expectedButtomStates[]= {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
 	
-	//open led situaltion//
-	getButtonState_ExpectAndReturn(BUTTON_RELEASE); //
-	dotapTurnOntapTurnOffLed(&info);	// led off ,button rel
-	getButtonState_ExpectAndReturn(BUTTON_PRESSED);
-	turnLed_Expect(LED_ON);
+	setupFake(expectedLedState, 1,buttonStates, 3);
+	
+	dotapTurnOntapTurnOffLed(&info);	
 	dotapTurnOntapTurnOffLed(&info);
-	getButtonState_ExpectAndReturn(BUTTON_RELEASE);
 	dotapTurnOntapTurnOffLed(&info);
-	//situaltion END//
-  
+	
+    verifyTurnOnLedCalls(1);
   
 	TEST_ASSERT_EQUAL(LED_ON, info.currentLedState);
 }
 
+void test_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_expect_led_to_turned_off(void)
+{
+	LedButtonInfo info = {LED_ON, BUTTON_RELEASE}; //initial state
+	LedState expectedLedState[] = {LED_OFF};
+	ButtonStates expectedButtomStates[]= {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
+	
+	setupFake(expectedLedState, 1,buttonStates, 3);
+	
+	dotapTurnOntapTurnOffLed(&info);	
+	dotapTurnOntapTurnOffLed(&info);
+	dotapTurnOntapTurnOffLed(&info);
+	
+    verifyTurnOnLedCalls(1);
+	TEST_ASSERT_EQUAL(LED_OFF,info.currentLedState);
+}
+/*
 void test_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_expect_led_to_turned_off(void)
 {
 	LedButtonInfo info = {LED_ON, BUTTON_RELEASE}; //initial state
@@ -173,3 +232,4 @@ void test_turnOnLedIfButtonIsPressed_given_button_is_presses_and_relese_expect_l
   
   turnOnLedIfButtonIsPressed();
 }
+*/

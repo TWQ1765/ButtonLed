@@ -11,6 +11,6 @@ typedef enum{
 /**
  * Return non-zero if button is prassed, zero otherwise.
  */
-int getButtonState(void);
+ButtonState getButtonState(void);
 
 #endif // _BUTTON_H
