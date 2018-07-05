@@ -94,7 +94,22 @@ void verifyTurnOnLedCalls(int numCalls){
 	}
 }
 
-
+void test_XXX_on(void)
+{
+	LedButtonInfo info = {LED_OFF, BUTTON_RELEASE}; //initial state
+	LedState expectedLedState[] = {LED_ON};
+	ButtonState expectedButtonStates[] = {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
+	
+	setupFake(expectedLedState, 1,expectedButtonStates, 3);
+	
+	getButtonState();	//should return RELEASE
+	getButtonState();	//should return PRESSED
+	getButtonState();	//should return RELEASE
+	turnLed(LED_ON);
+	
+	verifyTurnOnLedCalls(1);
+}
+	
 void test_dotapTurnOntapTurnOffLed_given_led_is_off_and_is_presses_and_relese_expect_led_to_turned_on(void)
 {
 	turnLedCallNumbers = 0;
