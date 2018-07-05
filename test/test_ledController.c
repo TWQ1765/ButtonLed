@@ -6,7 +6,7 @@
 int turnLedCallNumbers = 0;
 int expectedgetButtonStateMaxCalls = 0;
 int expectTurnledMaxCalls = 0;
-ButtonState *expectedbuttonState = NULL;
+ButtonState *expectedButtonStates = NULL;
 LedState *expectedLedState = NULL;
 
 void setUp(void)
@@ -32,7 +32,7 @@ void fake_turnLed(LedState state, int NumCalls){
 ButtonState fake_getButtonState(int NumCalls){
 	
 	if(NumCalls < expectedgetButtonStateMaxCalls){
-		return expectedButtomStates[NumCalls];	
+		return expectedButtonStates[NumCalls];	
 	}else
 		TEST_FAIL_MESSAGE("Received extra getButtonState() calls");
 }
@@ -43,7 +43,7 @@ void setupFake(LedState expLedStates[], int ledMaxCalls, ButtonState buttStates[
 	expectedLedState = expLedStates;
 	expectTurnledMaxCalls = ledMaxCalls;
 	getButtonState_StubWithCallback(fake_getButtonState);
-	expectedButtomStates = buttStates;
+	expectedButtonStates = buttStates;
 	expectedgetButtonStateMaxCalls = buttonMaxCalls;
 }
 
@@ -58,9 +58,9 @@ void test_dotapTurnOntapTurnOffLed_given_led_is_off_and_is_presses_and_relese_ex
 {
 	LedButtonInfo info = {LED_OFF, BUTTON_RELEASE}; //initial state
 	LedState expectedLedState[] = {LED_ON};
-	ButtonStates expectedButtomStates[]= {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
+	ButtonState expectedButtonStates[]= {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
 	
-	setupFake(expectedLedState, 1,buttonStates, 3);
+	setupFake(expectedLedState, 1,buttonState, 3);
 	
 	dotapTurnOntapTurnOffLed(&info);	
 	dotapTurnOntapTurnOffLed(&info);
@@ -75,9 +75,9 @@ void test_dotapTurnOntapTurnOffLed_given_led_is_on_and_is_presses_and_relese_exp
 {
 	LedButtonInfo info = {LED_ON, BUTTON_RELEASE}; //initial state
 	LedState expectedLedState[] = {LED_OFF};
-	ButtonStates expectedButtomStates[]= {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
+	ButtonState expectedButtonStates[]= {BUTTON_RELEASE,BUTTON_PRESSED,BUTTON_RELEASE};
 	
-	setupFake(expectedLedState, 1,buttonStates, 3);
+	setupFake(expectedLedState, 1,buttonState, 3);
 	
 	dotapTurnOntapTurnOffLed(&info);	
 	dotapTurnOntapTurnOffLed(&info);
